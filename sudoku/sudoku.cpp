@@ -14,12 +14,15 @@
 int main(int, const char *[])
 {
     auto b = create_board();
-    std::ofstream of("/tmp/board.html");
+//    std::ofstream of("/tmp/board.html");
     
-    of << html_board(b) << std::endl;
-    of.close();
+//     of << html_board(b) << std::endl;
+	
+//     of.close();
     
-    system("open /tmp/board.html");
+//    system("open /tmp/board.html");
+
+	std::cout << random_seq(1, 9) << std::endl;
     
     // insert code here...
 //    std::cout << "Hello, World!\n";

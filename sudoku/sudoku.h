@@ -15,6 +15,8 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <type_traits>
+#include <numeric>
 
 using Board = std::array<char, 81>;
 unsigned const board_size = 9;
@@ -27,8 +29,7 @@ auto board_column_has(Board const &b1, unsigned c, char n) -> bool {
 }
 
 auto board_row_has(Board const &b1, unsigned r, char n) -> bool {
-    for (unsigned c = 0; c < board_size; ++c)
-    {
+    for (unsigned c = 0; c < board_size; ++c) {
         if (b1[r * board_size + c] == n) return true;
     }
     return false;
@@ -47,19 +48,60 @@ auto board_allowed_at(Board const &b1, unsigned r, unsigned c) -> std::vector<ch
     // assume cell is empty
 
     std::vector<char> allowed;
-	for (int n = 1; n <= 9; ++n) {
+	for (char n = 1; n <= 9; ++n) {
         if (not board_column_has(b1, c, n) and
             not board_row_has(b1, r, n) and
             not board_third_has(b1, r, c, n)) {
             allowed.push_back(n);
-        }
+        } 
     }
     return allowed;
 }
 
-auto create_board() -> Board
-{
+auto row(unsigned n) -> unsigned {
+	return n / board_size;
+}
+
+auto col(unsigned n) -> unsigned {
+	return n % board_size;
+}
+
+auto random_seq(unsigned min, unsigned max) -> std::vector<unsigned> {
+	std::vector<unsigned> range(max-min+1);
+
+	std::iota(std::begin(range), std::end(range), min);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	std::shuffle(std::begin(range), std::end(range), gen);
+	
+	return range;
+}
+
+
+auto create_board2() -> Board {
+	Board b { { 0 } };
+	
+	auto seq = random_seq(1, 9);
+	unsigned index = 0;
+	unsigned const max_index = board_size * board_size - 1;
+	
+	for (index = 0; index < max_index; ++index) {
+		if (seq.empty()) seq = random_seq(1,9);
+		
+		char n = seq.back(); seq.push_back();
+		if (board_allowed_at(b, row(index), col(index), n)) {
+			b[index] = n;
+		}
+	}
+		
+	
+	
+}
+
+auto create_board() -> Board {
     Board b1 { {0} };
+    
     
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -153,9 +195,11 @@ auto html_board(Board const &b1) -> std::string {
     return buf.str();
 }
                     
-auto operator<<(std::ostream &os, std::vector<char> const &v) -> std::ostream & {
-	std::for_each(std::begin(v), std::end(v), [&](char c) {
-		os << (int)c << " ";
+template<typename T> 
+auto operator<<(std::ostream &os, std::vector<T> const &v) 
+	-> typename std::enable_if<std::is_integral<T>::value, std::ostream &>::type {
+	std::for_each(std::begin(v), std::end(v), [&](T c) {
+		os << (long)c << " ";
 	});
 	return os;
 }

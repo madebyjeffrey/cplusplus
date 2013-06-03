@@ -16,6 +16,18 @@
 
 #include "../Sudoku/sudoku.h"
 
+TEST_CASE("integer/division", "Testing assumption of n/3*3") {
+	REQUIRE((0/3*3)==0);
+	REQUIRE((1/3*3)==0);
+	REQUIRE((2/3*3)==0);
+	REQUIRE((3/3*3)==3);
+	REQUIRE((4/3*3)==3);
+	REQUIRE((5/3*3)==3);
+	REQUIRE((6/3*3)==6);
+	REQUIRE((7/3*3)==6);
+	REQUIRE((8/3*3)==6);
+}
+
 TEST_CASE("sudoku/board_allowed_at", "The numbers allowed at a square") {
     Board b { { 0 } };
     
@@ -91,11 +103,16 @@ TEST_CASE("sudoku/board_allowed_at5", "The numbers allowed at a square") {
     
     auto allowed = board_allowed_at(b, 0, 0);
     std::sort(std::begin(allowed), std::end(allowed));
-    decltype(board_allowed_at(b, 0, 0)) should_be { 4, 5 };
+    decltype(board_allowed_at(b, 0, 0)) should_be { 4 };
     
-    std::cerr << allowed << std::endl;
+//     std::cerr << allowed << std::endl;
 
-	REQUIRE(allowed.size() == 2);
+	REQUIRE(allowed.size() == 1);
+	REQUIRE(std::equal(std::begin(allowed), std::end(allowed), std::begin(should_be)));
+	
+	allowed = board_allowed_at(b, 0, 1);
+	should_be = { 5 };
+	REQUIRE(allowed.size() == 1);
 	REQUIRE(std::equal(std::begin(allowed), std::end(allowed), std::begin(should_be)));
 }
 
@@ -201,4 +218,23 @@ TEST_CASE("sudoku/board_col_has9", "The numbers allowed on a col of board, remov
     for (unsigned i = 0; i < board_size; ++i)
     	for (unsigned j = 0; j < board_size; ++j)
     		REQUIRE_FALSE(board_column_has(b, j, 9));
+}
+
+TEST_CASE("random_seq", "Should ensure all numbers are represented") {
+	auto res = random_seq(1, 9);
+	std::sort(std::begin(res), std::end(res));
+	decltype(random_seq(1,9)) should_be { 1,2,3,4,5,6,7,8,9 };
+	
+	REQUIRE(std::equal(std::begin(res), std::end(res), std::begin(should_be)));
+}
+
+TEST_CASE("rowcol", "Ensure row and col are correct for the indexes") {
+	REQUIRE(row(0) == 0);
+	REQUIRE(row(1) == 0);
+	REQUIRE(row(1 * board_size) == 1);
+	REQUIRE(row(board_size * board_size - 1) == board_size - 1);
+	REQUIRE(col(0) == 0);
+	REQUIRE(col(1) == 1);
+	REQUIRE(col(1 * board_size) == 0);
+	REQUIRE(col(board_size * board_size - 1) == board_size - 1);
 }
