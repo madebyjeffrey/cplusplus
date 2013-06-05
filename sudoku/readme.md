@@ -6,4 +6,14 @@ system shortly.
 
 Commands available are **make** and **make test**.
 
+Notes to read:
 
+http://www.stolaf.edu/people/hansonr/sudoku/exactcovermatrix.htm
+http://garethrees.org/2007/06/10/zendoku-generation/
+
+Algorithm X
+Dancing Links
+CSP
+http://www.sudokuwiki.org/Sudoku_Creation_and_Grading.pdf
+
+http://norvig.com/sudoku.html
