@@ -1,17 +1,19 @@
 # Makefile for "planet", a fractal planet generator
 
 # Change the following if your C compiler isn't called 'gcc'.
-CC=gcc
+CC=clang++
 
 # And change this to your favourite C compiler flags:
-CFLAGS = -O -g -W -Wall -D_USE_LIBM_MATH_H
+CFLAGS = -g -W -Wall -ferror-limit=10000 -Wno-unused-variable 
+CFLAGS += `pkg-config --cflags tclap`
 
-OBJS = planet.o 
 
-LIBS = -lm
+OBJS = planet.o image_bmp.o image_ppm.o image_xpm.o planet_fn.o projections.o
 
-.c.o:
-	$(CC) -c $(CFLAGS) $*.c
+LIBS = -lm `pkg-config --libs tclap`
+
+.cpp.o:
+	$(CC) -c $(CFLAGS) $*.cpp
 
 all:	planet
 
@@ -23,7 +25,7 @@ clean:
 	rm -f $(OBJS) planet
 
 SHARFILES = Manual.txt Makefile ReadMe \
-            planet.c \
+            planet.cpp \
             default.col defaultB.col burrows.col burrowsB.col mars.col\
             wood.col white.col
 
