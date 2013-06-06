@@ -18,13 +18,18 @@ double planet(double a,double b,double c,double d, double as,double bs,double cs
 // double x,y,z;		    /* goal point */
 // int level;		    /* levels to go */
 {
-    double abx,aby,abz, acx,acy,acz, adx,ady,adz;
+    double abx,aby,abz, acx,acy,acz, adx,ady,adz; // ADX, ADY, and ADZ represent the point A translated by a certain delta.
     double bcx,bcy,bcz, bdx,bdy,bdz, cdx,cdy,cdz;
     double lab, lac, lad, lbc, lbd, lcd;
     double ex, ey, ez, e, es, es1, es2, es3;
     double eax,eay,eaz, epx,epy,epz;
     double ecx,ecy,ecz, edx,edy,edz;
     double x1,y1,z1,x2,y2,z2,l1,tmp;
+    
+    /* notes from Paul:
+    Look for variables starting with the letter L. This seems to be his pattern for the norms of factors.
+    Huge swathes of if else statements are nothing more than determining which of two directed line segments is longer then reorganizing the input parameters in accordance.
+    */
 
     if (level>0) {
         if (level==11) {
@@ -49,6 +54,8 @@ double planet(double a,double b,double c,double d, double as,double bs,double cs
             ssdy=dy;
             ssdz=dz;
         }
+        
+        // pythagorean theorem?
         abx = ax-bx;
         aby = ay-by;
         abz = az-bz;

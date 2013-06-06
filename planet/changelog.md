@@ -10,5 +10,4 @@ design.
 				Changing extension and makefile to C++ mode, 23 warnings, 97 errors
 				Compiles.
 				
-				Adding use of [tclap](http://tclap.sourceforge.net) for command line parsing
 				
